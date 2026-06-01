@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+
+# Node.js dependencies
+node_modules/
+dist-ssr/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.eslintcache
+*.tsbuildinfo
+
+# Build output
+dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Windows特有のサムネイルキャッシュ（PowerShell環境なら必須）
+Thumbs.db
+ehthumbs.db
+
+# Viteのローカルキャッシュ（ビルドの高速化データ）
+.vite/
+
+# テスト実行時のカバレッジレポート（今後テストを書く場合）
+coverage/

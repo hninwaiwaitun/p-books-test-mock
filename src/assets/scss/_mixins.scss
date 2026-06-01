@@ -1,0 +1,7 @@
+// 定義のみ。置き換えは保留
+// src/assets/scss/_mixins.scss
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
