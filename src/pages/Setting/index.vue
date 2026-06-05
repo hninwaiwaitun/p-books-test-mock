@@ -181,7 +181,8 @@ const profileForm = ref({ name: '', email: '', role: '' });
 const passwordForm = ref({ current: '', new: '', confirm: '' });
 
 const openProfileModal = () => {
-  profileForm.value = { name: '', email: '', role: '' }; 
+  // プロファイル編集モーダルを開く時、アカウント情報（氏名、メール、権限ロール）を初期値として設定。
+  profileForm.value = { name: authState.user?.name, email: authState.user?.email, role: authState.user?.role }; 
   openModalProfile();
 };
 
