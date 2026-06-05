@@ -123,7 +123,8 @@ const handleGoogleLogin = async () => {
     // 💡 Googleログイン用API呼び出し
     const response = await api.loginWithGoogle();
     login(response.user);
-    router.push('/top');
+    // グーグルログインを押下するとトップページ画面に遷移。
+    router.push('/top-menu');
   } catch (error) {
     errorMessage.value = 'Google認証に失敗しました。';
   } finally {
