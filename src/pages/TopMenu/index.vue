@@ -14,7 +14,8 @@
       </header>
 
       <div class="dashboard-cards">
-        <div class="card status-blue clickable" @click="goToPage('/sales')">
+        <!-- 作業者権限：売上の非表示対応 -->
+        <div class="card status-blue clickable" v-if="authState.user?.role === '管理者'" @click="goToPage('/sales')">
           <h3>本日の売上</h3>
           <p class="value">{{ formatCurrency(dashboardSummary.todaySales) }}</p>
           <span class="trend">{{ dashboardSummary.salesTrend }}</span>
@@ -27,7 +28,7 @@
           <span class="hover-hint">在庫確認画面へ ➔</span>
         </div>
       </div>
-
+      
       <div class="news-section">
         <div class="news-header">
           <h3>社内連絡・お知らせ</h3>

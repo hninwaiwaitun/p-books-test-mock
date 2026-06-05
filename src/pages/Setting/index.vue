@@ -17,7 +17,8 @@
           <div class="setting-card">
             <div class="card-header">
               <h3>👤 アカウントプロファイル</h3>
-              <button class="btn-secondary-sm" @click="openProfileModal">✏️ プロファイルを編集</button>
+              <!-- 作業者権限：プロファイル編集機能の無効化 -->
+              <button class="btn-secondary-sm" :disabled="authState.user?.role === '作業者'" @click="openProfileModal">✏️ プロファイルを編集</button>
             </div>
             <div class="card-body-view">
               <div class="view-group">
@@ -38,7 +39,8 @@
           <div class="setting-card">
             <div class="card-header">
               <h3>🔒 セキュリティ設定</h3>
-              <button class="btn-secondary-sm" @click="openPasswordModal">🔑 パスワードを変更</button>
+              <!-- 作業者権限：パスワード変更機能の無効化 -->
+              <button class="btn-secondary-sm" :disabled="authState.user?.role === '作業者'" @click="openPasswordModal">🔑 パスワードを変更</button>
             </div>
             <div class="card-body-view">
               <div class="view-group">
@@ -62,11 +64,13 @@
               <div class="form-group">
                 <label>セッション有効タイムアウト時間 (分)</label>
                 <div class="input-with-hint">
+                <!-- 作業者権限：セッション有効タイムアウト時間機能の無効化 -->
                   <input 
                     type="number" 
                     v-model.number="currentSettings.system.sessionTimeout" 
                     @change="validateAndSaveTimeout"
                     placeholder="30"
+                    :disabled="authState.user?.role === '作業者'" 
                   />
                   <span class="unit">分</span>
                 </div>
@@ -77,7 +81,8 @@
               <div class="form-group">
                 <label>APIデータキャッシュ保持時間 (分)</label>
                 <div class="input-with-hint">
-                  <input type="number" v-model.number="currentSettings.system.apiCacheDuration" @change="saveSystemSettings" />
+                  <!-- 作業者権限：APIデータキャッシュ保持時間機能の無効化 -->
+                  <input type="number" v-model.number="currentSettings.system.apiCacheDuration" @change="saveSystemSettings" :disabled="authState.user?.role === '作業者'" />
                   <span class="unit">分</span>
                 </div>
               </div>
@@ -288,11 +293,15 @@ const saveSystemSettings = async () => {
 .card-body.form-row .form-group .input-with-hint { display: flex; align-items: center; gap: 8px; }
 .card-body.form-row .form-group .input-with-hint input[type="number"] { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; width: 100px; outline: none; }
 .card-body.form-row .form-group .input-with-hint input[type="number"]:focus { border-color: #6366f1; }
+/* 入力テキストdisabled 時のスタイルを追加 */
+.card-body.form-row .form-group .input-with-hint input[type="number"]:disabled { background-color: #f8fafc; color: #94a3b8; cursor: not-allowed; border-color: #e2e8f0; }
 .card-body.form-row .form-group .input-with-hint .unit { font-size: 14px; font-weight: 600; color: #475569; }
 .card-body.form-row .form-group .input-hint { font-size: 12px; color: #64748b; margin: 0; }
 .card-body.form-row .form-group .input-error { font-size: 12px; color: #dc2626; font-weight: bold; margin: 0; }
 .btn-secondary-sm { padding: 6px 12px; background-color: #fff; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; }
-.btn-secondary-sm:hover { background-color: #f1f5f9; color: #0f172a; border-color: #94a3b8; }
+.btn-secondary-sm:not(:disabled):hover { background-color: #f1f5f9; color: #0f172a; border-color: #94a3b8; }
+/* ボタンdisabled 時のスタイルを追加 */
+.btn-secondary-sm:disabled {　cursor: not-allowed; opacity: 0.6; background-color: #fff; color: #475569;　border-color: #cbd5e1;}
 .btn-primary { padding: 10px 18px; background-color: #4f46e5; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .btn-primary:hover:not(:disabled) { background-color: #3730a3; }
 .btn-primary.btn-danger { background-color: #dc2626; } .btn-primary.btn-danger:hover:not(:disabled) { background-color: #991b1b; }

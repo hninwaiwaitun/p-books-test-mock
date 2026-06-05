@@ -9,10 +9,12 @@
       <router-link to="/top-menu" class="menu-item" active-class="active">
         <span>📊</span> トップメニュー
       </router-link>
-      <router-link to="/user-list" class="menu-item" active-class="active">
+      <!-- 作業者権限：ユーザー一覧画面の非表示対応 -->
+      <router-link v-if="authState.user?.role === '管理者'" to="/user-list" class="menu-item" active-class="active">
         <span>👥</span> ユーザー一覧
       </router-link>
-      <router-link to="/sales" class="menu-item" active-class="active">
+      <!-- 作業者権限：売上管理画面の非表示対応 -->
+      <router-link v-if="authState.user?.role === '管理者'" to="/sales" class="menu-item" active-class="active">
         <span>💰</span> 売上管理
       </router-link>
       <router-link to="/stock" class="menu-item" active-class="active">
