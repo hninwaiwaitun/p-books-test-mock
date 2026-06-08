@@ -157,7 +157,9 @@ const defaultRowTemplate = {
 };
 
 const addNewRow = () => {
-  newRows.value.push({ ...defaultRowTemplate });
+  // JSONの変換を使って、ネストされたオブジェクトまで完全に別物としてコピー。
+  const clonedTemplate = JSON.parse(JSON.stringify(defaultRowTemplate));
+  newRows.value.push(clonedTemplate);
 };
 
 const removeNewRow = (index) => {
@@ -165,11 +167,17 @@ const removeNewRow = (index) => {
 };
 
 const checkNewCategory = (row) => {
-  if (row.category === '__NEW__') {
-    row.isCustomCategory = true;
+  /**
+   * row.categoryやrow.isCustomCategoryというプロパティが存在しないので、
+   * row.categoryInfo.nameやrow.categoryInfo.isCustomに修正。
+   */
+  if (row.categoryInfo.name === '__NEW__') {
+    row.categoryInfo.isCustom = true;
     row.category = '';
   } else {
-    row.isCustomCategory = false;
+    row.categoryInfo.isCustom = false;
+    // 通常カテゴリに戻した時は入力欄をクリア。
+    row.categoryInfo.customName = '';
   }
 };
 
