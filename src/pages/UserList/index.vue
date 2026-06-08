@@ -128,8 +128,10 @@ const dialogForm = ref({ name: '', email: '', role: '管理者', active: true })
  */
 const fetchUsers = async () => {
   const response = await api.getUsers({
-    query: searchQuery.value
-  });
+    query: searchQuery.value,
+    // 選択された権限（管理者、作業者）の値をパラメータとして渡す。
+    role: selectedRole.value
+  });  
   users.value = response;
 };
 
