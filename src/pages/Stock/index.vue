@@ -18,6 +18,17 @@
           </div>
         </div>
 
+        <!-- 検索バー: v-modelでsearchQueryをバインド。入力時にページを1に戻す -->
+        <div class="search-bar">
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            @input="currentPage = 1" 
+            placeholder="書籍名やIDで検索..." 
+            class="input-search" 
+          />
+        </div>
+
         <table class="stock-table">
           <thead>
             <tr>
@@ -48,7 +59,7 @@
               </td>
             </tr>
 
-          <tr v-for="(row, index) in newRows" :key="index" class="new-input-row">
+            <tr v-for="(row, index) in newRows" :key="index" class="new-input-row">
               <td class="text-new-label">NEW</td>
               <td>
                 <input type="text" v-model="row.title" placeholder="新しい書籍名を入力..." class="table-input"
@@ -60,7 +71,7 @@
                   <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
                   <option value="__NEW__">➕ 新しいカテゴリを追加...</option>
                 </select>
-              <input type="text" v-if="row.categoryInfo.name === '__NEW__' || row.categoryInfo.isCustom"
+                <input type="text" v-if="row.categoryInfo.name === '__NEW__' || row.categoryInfo.isCustom"
                   v-model="row.categoryInfo.customName" placeholder="新カテゴリ名..." class="table-input custom-cat-input"
                   :disabled="isSaving" />
               </td>
@@ -81,11 +92,12 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table>        
         <div v-if="isLoading" class="loading-state">
           データを読み込んでいます...
         </div>
-        <div v-else-if="stocks.length === 0" class="loading-state">
+        <!-- 全件空、または検索結果が0件の時の判定を filteredStocks に変更 -->
+        <div v-else-if="filteredStocks.length === 0" class="loading-state">
           表示できる在庫データがありません。
         </div>
 
@@ -122,6 +134,9 @@ import { api } from '../../api';
 const stocks = ref([]);
 const categories = ref([]);
 const newRows = ref([]);
+
+// 検索クエリ用の状態を追加
+const searchQuery = ref('');
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -228,23 +243,47 @@ const saveNewStocks = async () => {
   }
 };
 
-const totalPages = computed(() => Math.ceil(stocks.value.length / itemsPerPage));
+/**
+ *  書籍名とIDでフィルタリングする算出プロパティ
+ */
+const filteredStocks = computed(() => {
+  const query = searchQuery.value.trim().toLowerCase();
+  if (!query) return stocks.value;
+
+  return stocks.value.filter(stock => {
+    const matchTitle = stock.title ? stock.title.toLowerCase().includes(query) : false;
+    // IDは数値の場合を考慮して String() で型変換したのち検証
+    const matchId = stock.id ? String(stock.id).toLowerCase().includes(query) : false;
+    return matchTitle || matchId;
+  });
+});
+
+/**
+ *  フィルタリングされた結果を元に、総ページ数を算出
+ */
+const totalPages = computed(() => Math.ceil(filteredStocks.value.length / itemsPerPage));
+
+/**
+ *  フィルタリングされた結果から、現在のページのデータのみを切り出し
+ */
 const paginatedStocks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
-  return stocks.value.slice(start, start + itemsPerPage);
+  return filteredStocks.value.slice(start, start + itemsPerPage);
 });
 
 const deleteStock = (id) => {
   if (confirm(SYSTEM_MESSAGES.STOCK.DELETE_CONFIRM(id))) {
     stocks.value = stocks.value.filter(s => s.id !== id);
     if (currentPage.value > totalPages.value) {
-      currentPage.value = totalPages.value;
+      currentPage.value = Math.max(1, totalPages.value);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.search-bar { display: flex; gap: 16px; margin-bottom: 24px; }
+.input-search { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; flex: 1;}
 .stock-page-layout { display: flex; min-height: 100vh; background-color: #f1f5f9; }
 .main-content { flex: 1; padding: 40px; }
 .stock-container { background: #ffffff; padding: 32px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
