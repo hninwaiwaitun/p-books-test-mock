@@ -19,6 +19,10 @@ export const SYSTEM_MESSAGES = {
   STOCK: {
     DELETE_CONFIRM: (id) => `商品ID: ${id} を削除しますか？`,
     SAVE_SUCCESS: (count) => `${count} 件の新商品を一括登録しました。`
+  },
+  // メッセージ内に埋め込んだ文字列を返します。
+  USER: {
+    DELETE_CONFIRM: (id) => `ユーザーID: ${id} を削除しますか？`
   }
 };
 

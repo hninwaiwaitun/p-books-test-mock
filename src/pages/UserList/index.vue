@@ -108,6 +108,7 @@ import Sidebar from '../../components/Sidebar.vue';
 import { useModal } from '../../composables/useModal';
 import { validators } from '../../utils/validator';
 import { useAuth } from '../../store/auth';
+import { SYSTEM_MESSAGES } from '../../constants/messages';
 
 // 💡 共通APIクライアントをインポート
 import { api } from '../../api';
@@ -174,7 +175,11 @@ const submitForm = async () => {
 };
 
 const deleteUser = (id) => {
-  users.value = users.value.filter(user => user.id !== id);
+  // ユーザー情報を削除する時、確認メッセージが表示するため条件を追加する。
+  // 引数として削除したいユーザーidを受け取る。
+  if (confirm(SYSTEM_MESSAGES.USER.DELETE_CONFIRM(id))) {
+    users.value = users.value.filter(user => user.id !== id);
+  }
 };
 </script>
 
