@@ -10,6 +10,7 @@ import Stock from '../pages/Stock/index.vue'
 import Setting from '../pages/Setting/index.vue'
 // 404画面をインポート
 import NotFound from '../pages/NotFound/index.vue'
+import Publisher from '../pages/Publisher/index.vue'
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
   {
     path: '/:catchAll(.*)',
     redirect: '/404'
+  },
+  {
+    path: '/publisher',
+    name: 'Publishier',
+    component: Publisher
   }
 ]
 

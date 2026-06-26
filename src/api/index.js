@@ -4,6 +4,8 @@ import { dummyUsers } from '../pages/UserList/mockData.js';
 import { dummySales } from '../pages/Sales/mockData.js';
 import { dummyStocks, initialCategories } from '../pages/Stock/mockData.js';
 import { dummySettings } from '../pages/Setting/mockData.js';
+import { dummyCmpInfo } from '../pages/Publisher/mockData.js';
+import { compile } from 'vue';
 
 /**
  * P社管理システム 共通APIクライアントモジュール
@@ -256,6 +258,29 @@ export const api = {
   saveSystemConfig(systemData) {
     return new Promise((resolve) => {
       resolve({ success: true, updatedSystem: { ...systemData } });
+    });
+  },
+
+  // ==========================================
+  // 7. 出版社 (Publisher)
+  // ==========================================
+  
+  /**
+   * 出版社一覧の取得（検索条件付き）
+   * @param {Object} params - { query }
+   */
+  getCmpInfo(params = {}) {
+    return new Promise((resolve) => {
+      const filtered = dummyCmpInfo.filter(cmpInfo => {
+        const query = (params.query || '').toLowerCase().trim();
+        const matchQuery = cmpInfo.companyName.toLowerCase().includes(query) || cmpInfo.companyAddress.toLowerCase().includes(query) ||
+        cmpInfo.contact.toLowerCase().includes(query) || cmpInfo.email.toLowerCase().includes(query) ||
+         cmpInfo.register.toLowerCase().includes(query) || cmpInfo.update.toLowerCase().includes(query) || cmpInfo.note.toLowerCase().includes(query);
+        //const matchRole = !params.role || user.role === params.role;
+        //return matchQuery && matchRole;
+        return matchQuery;
+      });
+      resolve(filtered);
     });
   }
 };

@@ -23,6 +23,10 @@ export const SYSTEM_MESSAGES = {
   // メッセージ内に埋め込んだ文字列を返します。
   USER: {
     DELETE_CONFIRM: (id) => `ユーザーID: ${id} を削除しますか？`
+  },
+  // メッセージ内に埋め込んだ文字列を返します。
+  CMPINFO: {
+    DELETE_CONFIRM: (id) => `出版社情報のID: ${id} を削除しますか？`
   }
 };
 

@@ -23,6 +23,9 @@
       <router-link to="/setting" class="menu-item" active-class="active">
         <span>⚙️</span> 設定
       </router-link>
+      <router-link to="/publisher" class="menu-item" active-class="active">
+        <span>📖</span> 出版社
+      </router-link>
     </nav>
 
     <div class="sidebar-footer">
